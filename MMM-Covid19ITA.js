@@ -2,6 +2,8 @@
 //const Log = require("../../../js/logger.js");
 Module.register("MMM-Covid19ITA",{
 
+    jsonData:null,
+
     defaults: {
         header: "Covid19-ITA",
         urlNation: "https://github.com/pcm-dpc/COVID-19/blob/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json",
@@ -52,11 +54,12 @@ Module.register("MMM-Covid19ITA",{
         wrapper.className = "wrapper";
         wrapper.style.maxWidth = "300px";
 
-        if (!this.loaded) {
-            wrapper.innerHTML = this.message + "and couldn't load";
+        if (!this.jsonData) {
+            wrapper.innerHTML = "Waiting for data.. " + this.message;
             return wrapper;
         }
-        wrapper.innerText = this.message;
+        //wrapper.innerText = this.message;
+        wrapper.innerText = this.jsonData[0].data;
         //wrapper.innerHTML = "Ciao";
         //wrapper.innerText = "Ciaone";
         /**
@@ -100,33 +103,52 @@ Module.register("MMM-Covid19ITA",{
      * function called when all modules are loaded and the system is ready to boot up
      */
     start: function () {
-        //const Log = require("../../../js/logger.js");
-        //Log.info("Starting module: " + this.name);
         this.message = "just started";
-        this.firstUpdate = true;
-        this.loaded = false; // will become true once i'm done processing my info
-        this.stats = [];
+        //this.firstUpdate = true;
+        //this.loaded = false; // will become true once i'm done processing my info
+        //this.stats = [];
+        this.getJson();
         this.scheduleUpdate();  // update now - can improve
         //this.scheduleTestUpdate()
 
+        /*
         var self = this;
         setInterval(function () {
             self.updateDom();
         }, this.updateInterval) //update once every 10 min
-
+         */
 
     },
 
     scheduleUpdate: function (delay){
+        /*
         let nextLoad = 0;
         if(typeof delay !== "undefined" && delay >= 0){
             nextLoad = delay;
         }
 
+         */
+
         let self = this;
-        setTimeout(function (){
-            self.updateStats();
-        }, nextLoad);
+        setInterval(function (){
+            self.getJson();
+        }, this.config.updateInterval);
+    },
+
+    getJson: function (){
+        this.sendSocketNotification("MMM-Covid19ITA_GET_JSON", this.config.urlNation);
+    },
+
+    socketNotificationReceived: function (notification, payload) {
+        if (notification === "MMM-Covid19ITA_JSON_RESULT") {
+            // Only continue if the notification came from the request we made
+            // This way we can load the module more than once
+            if (payload.url === this.config.urlNation)
+            {
+                this.jsonData = payload.data;
+                this.updateDom(500);
+            }
+        }
     },
 
     getJSON : function (url, callback){
@@ -136,12 +158,12 @@ Module.register("MMM-Covid19ITA",{
         xhr.onload = function (){
             this.message = "response arrived";
             var status = xhr.status;
-            if(status == 200){
+            if(status === 200){
                 callback(null, xhr.responseText);
             }else
                 callback(status, xhr.responseText);
         }
-        xhr.send(null);
+        xhr.send();
         this.message = "request sent";
     },
 
