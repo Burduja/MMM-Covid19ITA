@@ -1,4 +1,7 @@
+
+//const Log = require("../../../js/logger.js");
 Module.register("MMM-Covid19ITA",{
+
     defaults: {
         header: "Covid19-ITA",
         urlNation: "https://github.com/pcm-dpc/COVID-19/blob/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json",
@@ -20,7 +23,7 @@ Module.register("MMM-Covid19ITA",{
      */
 
     getParsedJSONFromURL : function (url, callback) {
-        console.log("Entering ajaxGet...");
+        //console.log("Entering ajaxGet...");
         callback = (typeof callback == 'function' ? callback : false), xhr = null;
         var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
         xhr = new XMLHttpRequest();
@@ -129,7 +132,7 @@ Module.register("MMM-Covid19ITA",{
             //console.log("Data received");
             Log.info("data received");
             //this.stats = data;
-            this.scheduleUpdate(this.updateInterval);
+            this.scheduleUpdate(this.config.updateInterval);
             this.processStats(data);
             this.updateDom(this.config.animationSpeed);
         })
