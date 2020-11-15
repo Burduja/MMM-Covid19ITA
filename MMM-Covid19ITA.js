@@ -30,7 +30,7 @@ Module.register("MMM-Covid19ITA",{
         xhr = new XMLHttpRequest();
         if (!xhr)
             return null;
-        xhr.open("GET", urlNation,true);
+        xhr.open("GET", this.urlNation,true);
         xhr.onreadystatechange=function() {
             if (xhr.readyState===4 && callback) {
                 console.log("all ok")
@@ -44,20 +44,19 @@ Module.register("MMM-Covid19ITA",{
      * function called when the information on the screen needs to be updated. called by the updateDom() function
      */
     getDom: function () {
-        Log.info("entering Update Dop");
+        //Log.info("entering Update Dop");
         //console.log("About to update Dom");
         var wrapper = document.createElement("div");
         //wrapper.innerHTML = this.config.text;
-        wrapper.className = "wrapper";
+        //wrapper.className = "wrapper";
         wrapper.style.maxWidth = "300px";
 
         if (!this.loaded) {
             wrapper.innerHTML = this.translate('LOADING');
             return wrapper;
         }
-        if ((wrapper.innerHTML).localeCompare("Ciao"))
-            wrapper.innerHTML+= "Heyla";
         wrapper.innerHTML = "Ciao";
+        wrapper.innerText = "Ciaone";
 
         /*
         var header = document.createElement("header");
@@ -97,8 +96,8 @@ Module.register("MMM-Covid19ITA",{
      * function called when all modules are loaded and the system is ready to boot up
      */
     start: function () {
-        const Log = require("../../../js/logger.js");
-        Log.info("Starting module: " + this.name);
+        //const Log = require("../../../js/logger.js");
+        //Log.info("Starting module: " + this.name);
         this.firstUpdate = true;
         this.loaded = false; // will become true once i'm done processing my info
         this.stats = [];
@@ -167,6 +166,6 @@ Module.register("MMM-Covid19ITA",{
         this.stats[2] = data[0].dimessi_guariti;
         this.stats[3] = data[0].deceduti;
         this.loaded = true;
-        Log.info("done processing");
+        //Log.info("done processing");
     }
     });
