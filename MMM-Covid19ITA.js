@@ -40,6 +40,7 @@ Module.register("MMM-Covid19ITA",{
      * function called when the information on the screen needs to be updated. called by the updateDom() function
      */
     getDom: function (){
+        Log.info("entering Update Dop");
         //console.log("About to update Dom");
         var wrapper = document.createElement("div");
         //wrapper.innerHTML = this.config.text;
@@ -87,6 +88,7 @@ Module.register("MMM-Covid19ITA",{
      * function called when all modules are loaded and the system is ready to boot up
      */
     start: function () {
+        const Log = require("../../../js/logger.js");
         Log.info("Starting module: " + this.name);
         this.firstUpdate = true;
         this.loaded = false; // will become true once i'm done processing my info
@@ -117,13 +119,15 @@ Module.register("MMM-Covid19ITA",{
     updateStats: function () {
         let regionURL = this.urlRegions;
         let nationURL = this.urlNation;
+        Log.info("about to ask for Json");
         this.getParsedJSONFromURL(nationURL, function (response) {
             let data = JSON.parse(response);
             if (!response)
                 return;
             if (!data)
                 return;
-            console.log("Data received");
+            //console.log("Data received");
+            Log.info("data received");
             //this.stats = data;
             this.scheduleUpdate(this.updateInterval);
             this.processStats(data);
@@ -144,5 +148,6 @@ Module.register("MMM-Covid19ITA",{
         this.stats[2] = data[0].dimessi_guariti;
         this.stats[3] = data[0].deceduti;
         this.loaded = true;
+        Log.info("done processing");
     }
     });
