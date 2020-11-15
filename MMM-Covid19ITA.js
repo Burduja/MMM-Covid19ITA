@@ -9,6 +9,7 @@ Module.register("MMM-Covid19ITA",{
         animationSpeed: 3000,
         initialLoadDelay: 0,
         updateInterval: 1000 * 10 * 60, // 10 minutes
+        testUpdateInterval: 1000 * 30, //
         firstUpdate: true,
         statNames : ["Tot. Positive", "New Positive", "Tot. Recovered", "Tot. Dead"],
         //statisticsNation:[]
@@ -42,7 +43,7 @@ Module.register("MMM-Covid19ITA",{
     /**
      * function called when the information on the screen needs to be updated. called by the updateDom() function
      */
-    getDom: function (){
+    getDom: function () {
         Log.info("entering Update Dop");
         //console.log("About to update Dom");
         var wrapper = document.createElement("div");
@@ -54,7 +55,11 @@ Module.register("MMM-Covid19ITA",{
             wrapper.innerHTML = this.translate('LOADING');
             return wrapper;
         }
+        if ((wrapper.innerHTML).localeCompare("Ciao"))
+            wrapper.innerHTML+= "Heyla";
+        wrapper.innerHTML = "Ciao";
 
+        /*
         var header = document.createElement("header");
         header.classList.add("small", "bright", "light", "header");
         header.innerHTML = this.config.header;
@@ -74,7 +79,7 @@ Module.register("MMM-Covid19ITA",{
                     td.className += " bright align-right"
             })
 
-             */
+
             nameCell.innerHTML = this.statNames[j];
             totalCell.innerHTML = this.stats[0];
 
@@ -85,6 +90,7 @@ Module.register("MMM-Covid19ITA",{
         }
 
         wrapper.appendChild(table);
+    */
         return wrapper;
     },
     /**
@@ -97,6 +103,7 @@ Module.register("MMM-Covid19ITA",{
         this.loaded = false; // will become true once i'm done processing my info
         this.stats = [];
         this.scheduleUpdate();  // update now - can improve
+        //this.scheduleTestUpdate()
         /*
         var self = this;
         setInterval(function () {
@@ -106,8 +113,10 @@ Module.register("MMM-Covid19ITA",{
          */
     },
 
+
+
     scheduleUpdate: function (delay){
-        let nextLoad;
+        let nextLoad = 0;
         if(typeof delay !== "undefined" && delay >= 0){
             nextLoad = delay;
         }
@@ -120,6 +129,9 @@ Module.register("MMM-Covid19ITA",{
 
 
     updateStats: function () {
+
+
+        /*
         let regionURL = this.urlRegions;
         let nationURL = this.urlNation;
         Log.info("about to ask for Json");
@@ -135,7 +147,11 @@ Module.register("MMM-Covid19ITA",{
             this.scheduleUpdate(this.config.updateInterval);
             this.processStats(data);
             this.updateDom(this.config.animationSpeed);
+
         })
+         */
+        this.scheduleUpdate(this.testUpdateInterval);
+        this.updateDom(this.animationSpeed);
     },
 
 
