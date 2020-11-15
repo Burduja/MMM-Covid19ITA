@@ -25,23 +25,7 @@ Module.register("MMM-Covid19ITA",{
 
      */
 
-    getParsedJSONFromURL : function (url, callback) {
-        //console.log("Entering ajaxGet...");
-        callback = (typeof callback == 'function' ? callback : false), xhr = null;
-        var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-        xhr = new XMLHttpRequest();
-        if (!xhr)
-            return null;
-        xhr.open("GET", this.urlNation,true);
-        xhr.onreadystatechange=function() {
-            if (xhr.readyState===4 && callback) {
-                console.log("all ok")
-                callback(xhr.response)
-            }
-        }
-        xhr.send(null);
-        return xhr;
-    },
+
     /**
      * function called when the information on the screen needs to be updated. called by the updateDom() function
      */
@@ -55,11 +39,11 @@ Module.register("MMM-Covid19ITA",{
         wrapper.style.maxWidth = "300px";
 
         if (!this.jsonData) {
-            wrapper.innerHTML = "Waiting for data.. " + this.message;
+            wrapper.innerHTML = "Waiting for data.+. " + this.message;
             return wrapper;
         }
-        //wrapper.innerText = this.message;
-        wrapper.innerText = this.jsonData[0].data;
+        wrapper.innerText = this.message;
+        //wrapper.innerText = this.jsonData[0].data;
         //wrapper.innerHTML = "Ciao";
         //wrapper.innerText = "Ciaone";
         /**
@@ -121,14 +105,6 @@ Module.register("MMM-Covid19ITA",{
     },
 
     scheduleUpdate: function (delay){
-        /*
-        let nextLoad = 0;
-        if(typeof delay !== "undefined" && delay >= 0){
-            nextLoad = delay;
-        }
-
-         */
-
         let self = this;
         setInterval(function (){
             self.getJson();
@@ -140,11 +116,13 @@ Module.register("MMM-Covid19ITA",{
     },
 
     socketNotificationReceived: function (notification, payload) {
+        this.message = "received Notification";
         if (notification === "MMM-Covid19ITA_JSON_RESULT") {
             // Only continue if the notification came from the request we made
             // This way we can load the module more than once
             if (payload.url === this.config.urlNation)
             {
+
                 this.jsonData = payload.data;
                 this.updateDom(500);
             }
@@ -184,32 +162,7 @@ Module.register("MMM-Covid19ITA",{
                this.updateDom(this.animationSpeed);
            }
         });
-
-
-        /*
-        this.getParsedJSONFromURL(nationURL, function (response) {
-            let data = JSON.parse(response);
-            if (!response)
-                return;
-            if (!data)
-                return;
-            //console.log("Data received");
-            //Log.info("data received");
-            //this.stats = data;
-            this.message = "received Data";
-            this.scheduleUpdate(this.updateInterval);
-            this.processStats(data);
-            this.updateDom(this.animationSpeed);
-        })
-
-         */
-
-
-
-
     },
-
-
     processStats: function (data){
         this.statisticsNation[0] = data[0].totale_positivi;
         this.statisticsNation[1] = data[0].nuovi_positivi;
