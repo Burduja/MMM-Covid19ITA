@@ -8,7 +8,7 @@ Module.register("MMM-Covid19ITA",{
         urlRegions: "https://github.com/pcm-dpc/COVID-19/blob/master/dati-json/dpc-covid19-ita-regioni-latest.json",
         animationSpeed: 3000,
         initialLoadDelay: 0,
-        updateInterval: 1000 * 30, // 30 sec
+        updateInterval: 1000 * 10, // 30 sec
         testUpdateInterval: 1000 * 30, //
         firstUpdate: true,
         statNames : ["Tot. Positive", "New Positive", "Tot. Recovered", "Tot. Dead"],
@@ -132,15 +132,15 @@ Module.register("MMM-Covid19ITA",{
     getJSON : function (url, callback){
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
-        xhr.responseType = "json";
+        //xhr.responseType = "json";
         xhr.onload = function (){
             var status = xhr.status;
             if(status == 200){
-                callback(null, xhr.response);
+                callback(null, xhr.responseText);
             }else
-                callback(status, xhr.response);
+                callback(status, xhr.responseText);
         }
-        xhr.send();
+        xhr.send(null);
     },
 
     updateStats: function () {
