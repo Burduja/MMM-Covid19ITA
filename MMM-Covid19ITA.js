@@ -129,12 +129,39 @@ Module.register("MMM-Covid19ITA",{
         }, nextLoad);
     },
 
+    getJSON : function (url, callback){
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.responseType = "json";
+        xhr.onload = function (){
+            var status = xhr.status;
+            if(status == 200){
+                callback(null, xhr.response);
+            }else
+                callback(status, xhr.response);
+        }
+        xhr.send();
+    },
 
     updateStats: function () {
         let regionURL = this.urlRegions;
         let nationURL = this.urlNation;
         //Log.info("about to ask for Json");
         this.message = "asking for JSON";
+
+        this.getJSON(this.urlNation, function (err, data){
+           if (err!= null){
+               this.message = "something went wrong";
+           }else {
+               let stat = JSON.parse(data);
+               this.message = "data received";
+               this.scheduleUpdate(this.updateInterval);
+               this.processStats(stat);
+           }
+        });
+
+
+        /*
         this.getParsedJSONFromURL(nationURL, function (response) {
             let data = JSON.parse(response);
             if (!response)
@@ -149,6 +176,12 @@ Module.register("MMM-Covid19ITA",{
             this.processStats(data);
             this.updateDom(this.animationSpeed);
         })
+
+         */
+
+
+        this.updateDom(this.animationSpeed);
+
     },
 
 
