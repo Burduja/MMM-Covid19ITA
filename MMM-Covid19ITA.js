@@ -39,18 +39,18 @@ Module.register("MMM-Covid19ITA",{
         wrapper.style.maxWidth = "300px";
 
         if (!this.jsonData) {
-            wrapper.innerHTML = "Waiting for data.+. " + this.message;
+            wrapper.innerHTML = "Waiting for data... " + this.message;
             return wrapper;
         }
-        wrapper.innerText = this.message;
+        //wrapper.innerText = this.message;
         //wrapper.innerText = this.jsonData[0].data;
         //wrapper.innerHTML = "Ciao";
         //wrapper.innerText = "Ciaone";
-        /**
+
 
         var header = document.createElement("header");
         header.classList.add("small", "bright", "light", "header");
-        header.innerHTML = this.header;
+        header.innerHTML = this.config.header;
         wrapper.appendChild(header);
 
         var table = document.createElement("table");
@@ -60,17 +60,17 @@ Module.register("MMM-Covid19ITA",{
             var nameCell = document.createElement('th');
             var totalCell = document.createElement('th');
 
-
+            /*
             [nameCell, totalCell].forEach((td, i) => {
                 td.className = 'small';
                 if (i !== 0)
                     td.className += " bright align-right"
             })
 
-
+             */
 
             nameCell.innerHTML = this.statNames[j];
-            totalCell.innerHTML = this.stats[0];
+            totalCell.innerHTML = this.statisticsNation[0];
 
             row.appendChild(nameCell);
             row.appendChild(totalCell);
@@ -79,7 +79,7 @@ Module.register("MMM-Covid19ITA",{
         }
 
         wrapper.appendChild(table);
-    */
+
 
         return wrapper;
     },
@@ -87,7 +87,7 @@ Module.register("MMM-Covid19ITA",{
      * function called when all modules are loaded and the system is ready to boot up
      */
     start: function () {
-        this.message = "just started";
+        this.message = "Just started";
         //this.firstUpdate = true;
         //this.loaded = false; // will become true once i'm done processing my info
         //this.stats = [];
@@ -122,7 +122,9 @@ Module.register("MMM-Covid19ITA",{
             // This way we can load the module more than once
             if (payload.url === this.config.urlNation)
             {
-                this.jsonData = payload;
+                this.jsonData = payload.data;
+                //this.message = this.jsonData[0].stato;
+                this.processStats();
                 this.updateDom(500);
             }
         }
@@ -162,11 +164,11 @@ Module.register("MMM-Covid19ITA",{
            }
         });
     },
-    processStats: function (data){
-        this.statisticsNation[0] = data[0].totale_positivi;
-        this.statisticsNation[1] = data[0].nuovi_positivi;
-        this.statisticsNation[2] = data[0].dimessi_guariti;
-        this.statisticsNation[3] = data[0].deceduti;
+    processStats: function (){
+        this.statisticsNation[0] = this.jsonData[0].totale_positivi;
+        this.statisticsNation[1] = this.jsonData[0].nuovi_positivi;
+        this.statisticsNation[2] = this.jsonData[0].dimessi_guariti;
+        this.statisticsNation[3] = this.jsonData[0].deceduti;
         this.message = "done processing stats";
         this.loaded = true;
     }
