@@ -116,13 +116,12 @@ Module.register("MMM-Covid19ITA",{
     },
 
     socketNotificationReceived: function (notification, payload) {
-        this.message = "received Notification";
+        this.message = payload[0].data;
         if (notification === "MMM-Covid19ITA_JSON_RESULT") {
             // Only continue if the notification came from the request we made
             // This way we can load the module more than once
             if (payload.url === this.config.urlNation)
             {
-
                 this.jsonData = payload;
                 this.updateDom(500);
             }
