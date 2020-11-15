@@ -6,7 +6,7 @@ Module.register("MMM-Covid19ITA",{
 
     defaults: {
         header: "Covid19-ITA",
-        urlNation: "https://github.com/pcm-dpc/COVID-19/blob/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json",
+        urlNation: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale-latest.json",
         urlRegions: "https://github.com/pcm-dpc/COVID-19/blob/master/dati-json/dpc-covid19-ita-regioni-latest.json",
         animationSpeed: 3000,
         initialLoadDelay: 0,
