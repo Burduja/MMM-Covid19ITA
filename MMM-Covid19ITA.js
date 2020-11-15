@@ -123,7 +123,7 @@ Module.register("MMM-Covid19ITA",{
             if (payload.url === this.config.urlNation)
             {
 
-                this.jsonData = payload.data;
+                this.jsonData = payload;
                 this.updateDom(500);
             }
         }
