@@ -8,7 +8,7 @@ Module.register("MMM-Covid19ITA",{
         urlRegions: "https://github.com/pcm-dpc/COVID-19/blob/master/dati-json/dpc-covid19-ita-regioni-latest.json",
         animationSpeed: 3000,
         initialLoadDelay: 0,
-        updateInterval: 1000 * 10 * 60, // 10 minutes
+        updateInterval: 1000 * 30, // 30 sec
         testUpdateInterval: 1000 * 30, //
         firstUpdate: true,
         statNames : ["Tot. Positive", "New Positive", "Tot. Recovered", "Tot. Dead"],
@@ -46,6 +46,7 @@ Module.register("MMM-Covid19ITA",{
     getDom: function () {
         //Log.info("entering Update Dop");
         //console.log("About to update Dom");
+
         var wrapper = document.createElement("div");
         //wrapper.innerHTML = this.config.text;
         wrapper.className = "wrapper";
@@ -55,9 +56,10 @@ Module.register("MMM-Covid19ITA",{
             wrapper.innerHTML = this.translate('LOADING');
             return wrapper;
         }
+        wrapper.innerText = this.message;
         //wrapper.innerHTML = "Ciao";
         //wrapper.innerText = "Ciaone";
-
+        /**
 
         var header = document.createElement("header");
         header.classList.add("small", "bright", "light", "header");
@@ -71,13 +73,13 @@ Module.register("MMM-Covid19ITA",{
             var nameCell = document.createElement('th');
             var totalCell = document.createElement('th');
 
-            /**
+
             [nameCell, totalCell].forEach((td, i) => {
                 td.className = 'small';
                 if (i !== 0)
                     td.className += " bright align-right"
             })
-             */
+
 
 
             nameCell.innerHTML = this.statNames[j];
@@ -90,6 +92,7 @@ Module.register("MMM-Covid19ITA",{
         }
 
         wrapper.appendChild(table);
+    */
 
         return wrapper;
     },
@@ -99,6 +102,7 @@ Module.register("MMM-Covid19ITA",{
     start: function () {
         //const Log = require("../../../js/logger.js");
         //Log.info("Starting module: " + this.name);
+        this.message = "just started";
         this.firstUpdate = true;
         this.loaded = false; // will become true once i'm done processing my info
         this.stats = [];
@@ -130,6 +134,7 @@ Module.register("MMM-Covid19ITA",{
         let regionURL = this.urlRegions;
         let nationURL = this.urlNation;
         //Log.info("about to ask for Json");
+        this.message = "asking for JSON";
         this.getParsedJSONFromURL(nationURL, function (response) {
             let data = JSON.parse(response);
             if (!response)
@@ -139,6 +144,7 @@ Module.register("MMM-Covid19ITA",{
             //console.log("Data received");
             //Log.info("data received");
             //this.stats = data;
+            this.message = "received Data";
             this.scheduleUpdate(this.updateInterval);
             this.processStats(data);
             this.updateDom(this.animationSpeed);
@@ -151,6 +157,7 @@ Module.register("MMM-Covid19ITA",{
         this.statisticsNation[1] = data[0].nuovi_positivi;
         this.statisticsNation[2] = data[0].dimessi_guariti;
         this.statisticsNation[3] = data[0].deceduti;
+        this.message = "done processing stats";
         this.loaded = true;
     }
     });
