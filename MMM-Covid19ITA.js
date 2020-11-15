@@ -48,20 +48,20 @@ Module.register("MMM-Covid19ITA",{
         //console.log("About to update Dom");
         var wrapper = document.createElement("div");
         //wrapper.innerHTML = this.config.text;
-        //wrapper.className = "wrapper";
+        wrapper.className = "wrapper";
         wrapper.style.maxWidth = "300px";
 
         if (!this.loaded) {
             wrapper.innerHTML = this.translate('LOADING');
             return wrapper;
         }
-        wrapper.innerHTML = "Ciao";
-        wrapper.innerText = "Ciaone";
+        //wrapper.innerHTML = "Ciao";
+        //wrapper.innerText = "Ciaone";
 
-        /*
+
         var header = document.createElement("header");
         header.classList.add("small", "bright", "light", "header");
-        header.innerHTML = this.config.header;
+        header.innerHTML = this.header;
         wrapper.appendChild(header);
 
         var table = document.createElement("table");
@@ -71,12 +71,13 @@ Module.register("MMM-Covid19ITA",{
             var nameCell = document.createElement('th');
             var totalCell = document.createElement('th');
 
-            /*
+            /**
             [nameCell, totalCell].forEach((td, i) => {
                 td.className = 'small';
                 if (i !== 0)
                     td.className += " bright align-right"
             })
+             */
 
 
             nameCell.innerHTML = this.statNames[j];
@@ -89,7 +90,7 @@ Module.register("MMM-Covid19ITA",{
         }
 
         wrapper.appendChild(table);
-    */
+
         return wrapper;
     },
     /**
@@ -103,16 +104,14 @@ Module.register("MMM-Covid19ITA",{
         this.stats = [];
         this.scheduleUpdate();  // update now - can improve
         //this.scheduleTestUpdate()
-        /*
+
         var self = this;
         setInterval(function () {
             self.updateDom();
         }, this.updateInterval) //update once every 10 min
 
-         */
+
     },
-
-
 
     scheduleUpdate: function (delay){
         let nextLoad = 0;
@@ -128,12 +127,9 @@ Module.register("MMM-Covid19ITA",{
 
 
     updateStats: function () {
-
-
-        /*
         let regionURL = this.urlRegions;
         let nationURL = this.urlNation;
-        Log.info("about to ask for Json");
+        //Log.info("about to ask for Json");
         this.getParsedJSONFromURL(nationURL, function (response) {
             let data = JSON.parse(response);
             if (!response)
@@ -141,31 +137,20 @@ Module.register("MMM-Covid19ITA",{
             if (!data)
                 return;
             //console.log("Data received");
-            Log.info("data received");
+            //Log.info("data received");
             //this.stats = data;
-            this.scheduleUpdate(this.config.updateInterval);
+            this.scheduleUpdate(this.updateInterval);
             this.processStats(data);
-            this.updateDom(this.config.animationSpeed);
-
+            this.updateDom(this.animationSpeed);
         })
-         */
-        this.scheduleUpdate(this.testUpdateInterval);
-        this.updateDom(this.animationSpeed);
     },
 
 
     processStats: function (data){
-        /**
         this.statisticsNation[0] = data[0].totale_positivi;
         this.statisticsNation[1] = data[0].nuovi_positivi;
         this.statisticsNation[2] = data[0].dimessi_guariti;
         this.statisticsNation[3] = data[0].deceduti;
-         */
-        this.stats[0] = data[0].totale_positivi;
-        this.stats[1] = data[0].nuovi_positivi;
-        this.stats[2] = data[0].dimessi_guariti;
-        this.stats[3] = data[0].deceduti;
         this.loaded = true;
-        //Log.info("done processing");
     }
     });
