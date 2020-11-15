@@ -53,7 +53,7 @@ Module.register("MMM-Covid19ITA",{
         wrapper.style.maxWidth = "300px";
 
         if (!this.loaded) {
-            wrapper.innerHTML = this.translate('LOADING');
+            wrapper.innerHTML = this.message + "and couldn't load";
             return wrapper;
         }
         wrapper.innerText = this.message;
@@ -134,6 +134,7 @@ Module.register("MMM-Covid19ITA",{
         xhr.open("GET", url, true);
         //xhr.responseType = "json";
         xhr.onload = function (){
+            this.message = "response arrived";
             var status = xhr.status;
             if(status == 200){
                 callback(null, xhr.responseText);
@@ -141,6 +142,7 @@ Module.register("MMM-Covid19ITA",{
                 callback(status, xhr.responseText);
         }
         xhr.send(null);
+        this.message = "request sent";
     },
 
     updateStats: function () {
@@ -157,6 +159,7 @@ Module.register("MMM-Covid19ITA",{
                this.message = "data received";
                this.scheduleUpdate(this.updateInterval);
                this.processStats(stat);
+               this.updateDom(this.animationSpeed);
            }
         });
 
@@ -180,7 +183,7 @@ Module.register("MMM-Covid19ITA",{
          */
 
 
-        this.updateDom(this.animationSpeed);
+
 
     },
 
